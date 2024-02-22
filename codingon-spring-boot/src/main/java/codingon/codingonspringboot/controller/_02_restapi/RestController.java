@@ -127,7 +127,7 @@ public class RestController {
     @PostMapping("/restapi/practice/result")
     public String postPractice3(@RequestParam String name, @RequestParam Integer age, @RequestParam String gender,
                                 @RequestParam String year, @RequestParam String month, @RequestParam String day,
-                                @RequestParam boolean trip, @RequestParam boolean fassion, @RequestParam boolean food,
+                                @RequestParam(required = false) boolean trip, @RequestParam(required = false) boolean fassion, @RequestParam(required = false) boolean food,
                                 Model model) {
         model.addAttribute("name", name);
         model.addAttribute("age", age);
