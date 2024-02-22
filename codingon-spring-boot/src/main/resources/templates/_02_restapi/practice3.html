@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>practice3</title>
+</head>
+<body>
+    <h1>폼전송 실습</h1>
+    <form action="/restapi/practice/result" method="post">
+        <label>
+        <input type="text" name="name">
+            이름</label>
+        <br>
+        <input type="text" name="age">
+        나이</label>
+        <br>
+        <label>
+        <input type="radio" value="man" name="gender">
+            남자
+        </label>
+        <label>
+        <input type="radio" value="woman" name="gender">
+            여자
+        </label>
+        <br>
+        <label>
+            생년월일
+            <select name="year">
+                <option th:each="year:${years}" th:value="${year}" th:text="${year}"></option>
+            </select>
+            <select name="month">
+                <option th:each="month:${months}" th:value="${month}" th:text="${month}"></option>
+            </select>
+            <select name="day">
+                <option th:each="day:${days}" th:value="${day}" th:text="${day}"></option>
+            </select>
+        </label>
+        <label>
+            관심사 <input type="checkbox" name="trip"> 여행 <input type="checkbox" name="fassion"> 패션 <input type="checkbox" name="food"> 음식
+        </label>
+        <button>회원가입</button>
+    </form>
+</body>
+</html>
