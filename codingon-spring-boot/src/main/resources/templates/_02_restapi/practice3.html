@@ -35,8 +35,15 @@
                 <option th:each="day:${days}" th:value="${day}" th:text="${day}"></option>
             </select>
         </label>
+        <h3>관심사</h3>
         <label>
-            관심사 <input type="checkbox" name="trip"> 여행 <input type="checkbox" name="fassion"> 패션 <input type="checkbox" name="food"> 음식
+              <input type="checkbox" name="trip">여행
+        </label>
+        <label>
+             <input type="checkbox" name="fassion">패션
+        </label>
+        <label>
+            <input type="checkbox" name="food"> 음식
         </label>
         <button>회원가입</button>
     </form>
