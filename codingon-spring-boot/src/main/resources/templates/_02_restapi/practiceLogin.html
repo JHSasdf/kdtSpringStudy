@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>practice3</title>
+</head>
+<body>
+<h1>다이내믹 폼전송 실습</h1>
+
+<h3>회원가입</h3>
+<form id="form0">
+    <input type="text" placeholder="아이디" name="id" >
+    <input type="password" placeholder="패스워드" name="password">
+    <button type="button" onclick="signup()">회원가입</button>
+</form>
+<hr>
+
+<form id="form1">
+    <input type="text" placeholder="아이디" name="id" >
+    <input type="password" placeholder="패스워드" name="password">
+    <button type="button" onclick="submitForm()">로그인</button>
+</form>
+<hr>
+<form id="form2">
+    <input type="text" placeholder="아이디" name="id" >
+    <input type="text" placeholder="새 아이디" name="newid" >
+    <input type="password" placeholder="패스워드" name="password">
+    <button type="button" onclick="submitForm2()">정보 변경</button>
+</form>
+
+<hr>
+<form id="form3">
+    <input type="text" placeholder="아이디" name="id" >
+    <input type="password" placeholder="패스워드" name="password">
+    <button type="button" onclick="deleteInfo()">탈퇴</button>
+</form>
+<button onclick="getInfos()">목록 출력</button>
+</body>
+<script>
+    function getInfos() {
+  axios.get(`/restapi/practice/dynamic/getinfo`).then((res) => {
+        console.log(res.data);
+    })
+}
+
+    function signup() {
+  const form = document.getElementById("form0");
+  axios.post(`/restapi/practice/dynamic/signup`, {
+      id: form.id.value,
+      password: form.password.value,
+    }).then((res) => {
+        console.log(res.data);
+    })
+}
+
+    function submitForm() {
+  const form = document.getElementById("form1");
+  axios.post(`/restapi/practice/dynamic/login`, {
+      id: form.id.value,
+      password: form.password.value,
+    }).then((res) => {
+        console.log(res.data);
+    })
+}
+function submitForm2() {
+  const form = document.getElementById("form2");
+  axios.post(`/restapi/practice/dynamic/changeInfo`, {
+      id: form.id.value,
+      newId: form.newid.value,
+      password: form.password.value,
+    }).then((res) => {
+        console.log(res.data);
+    })
+}
+
+    function deleteInfo() {
+  const form = document.getElementById("form3");
+  axios.post(`/restapi/practice/dynamic/delete`, {
+      id: form.id.value,
+      password: form.password.value,
+    }).then((res) => {
+        console.log(res.data);
+    })
+}
+
+</script>
+</html>

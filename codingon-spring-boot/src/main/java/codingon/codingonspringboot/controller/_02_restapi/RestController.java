@@ -1,10 +1,14 @@
 package codingon.codingonspringboot.controller._02_restapi;
 
+import codingon.codingonspringboot.dto.ChangeInfoDTO;
 import codingon.codingonspringboot.dto.UserDTO;
+import codingon.codingonspringboot.vo.LoginVO;
+import codingon.codingonspringboot.vo.UserVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.stream.IntStream;
 
 @Controller
@@ -104,7 +108,7 @@ public class RestController {
     // ㄴ 여기까지 코드는 return 이 항상 Template View! 하지만 API 에서 데이터 자체를 응답하고 싶다면?
     // => @ResponseBody 어노테이션 사용
     @PostMapping("/post/res3")
-    @ResponseBody
+    @ResponseBody // restAPI로 응답
     public String postRes3(@RequestParam String name, @RequestParam int age, Model model) {
         // @ResponseBody 어노테이션
         // - 응답시 객체를 JSON 으로 리턴할 때 사용 (직렬화, serialize)
@@ -142,6 +146,7 @@ public class RestController {
     }
 
     // ======================= DTO 이용 ==============================
+    // 일반 폼을 이용할 땐 DTO를 이용해야 한다.
     // 1. Get 요청
     @GetMapping("/dto/res1")
     @ResponseBody
@@ -176,4 +181,181 @@ public class RestController {
         // => xml / json이 아니기 떄문에 @RequestBody 어노테이션 사용 시 오류 발생함
         return userDTO.getName() + " " + userDTO.getAge();
     } // (X) error (type=Unsupported Media Type, status=415)
-}
+
+
+    // ============================= VO 이용 =============================
+    @GetMapping("/vo/res1")
+    @ResponseBody
+    public String voRes1(@ModelAttribute UserVO userVO) {
+        System.out.println(userVO.hashCode());
+        // @ModelAttribute 를 이용하면 객체의 set 함수를 이용해 값을 넣어준다.
+        // VO에는 setter가 없기 때문에 set 함수를 못써서 null 값이 나온다
+        return "이름: " + userVO.getName() + " 나이: " + userVO.getAge();
+    } // O (null, null)
+
+    @PostMapping("/vo/res2")
+    @ResponseBody
+    public String voRes2(UserVO userVO) {
+        // @ModelAttribute 없어도 알아서 해주기 때문에 null
+        return userVO.getName() + " " + userVO.getAge();
+    }// O (null, null)
+
+    @PostMapping("/vo/res3")
+    @ResponseBody
+    public String voRes3(@RequestBody UserVO userVO) {
+        // @ModelAttribute 없어도 알아서 해주기 때문에 null
+        return userVO.getName() + " " + userVO.getAge();
+    }// (X) error (type=Unsupported Media Type, status=415)
+
+
+    // DTO 이용 With axios
+    @GetMapping("/axios/res1")
+    @ResponseBody
+    public String axiosRes1(@RequestParam String name, @RequestParam String age) {
+        return "이름: " + name + ", 나이: " + age;
+    } // o
+    @GetMapping("/axios/res2")
+    @ResponseBody
+    public String axiosRes2(UserDTO userDTO) {
+        // @modelAttribute 생략
+        // @ModelAttribute: HTML 폼 데이터를 컨트롤러로 전달할 때 객체 매핑하는 어노테이션
+        return "이름: " + userDTO.getName() + ", 나이: " + userDTO.getAge();
+    }  // o
+
+    @PostMapping("/axios/res3")
+    @ResponseBody
+    public String axiosRes3(@RequestParam String name, @RequestParam String age) {
+        // @modelAttribute 생략
+        // @RequestParam required 기본값이 true
+        // axios 로 값을 전달하게 될 경우 파라미터로 값이 들어오지 않는다. (Post 로 보냈을 때)
+        // 값이 들어오지 않는데 기본 값이 true이기 때문에 오류 발생
+        return "이름: " + name + ", 나이: " + age;
+    } // X (error 400)
+
+    @PostMapping("/axios/res4")
+    @ResponseBody
+    public String axiosRes4(UserDTO userDTO) {
+        // @modelAttribute 생략
+        // @ModelAttribute: HTML 폼 데이터를 컨트롤러로 전달할 때 객체 매핑하는 어노테이션
+        // axios 로 값을 전달하게 될 경우 파라미터로 값이 들어오지 않는다. (Post 로 보냈을 때)
+
+        //문제는 HTTP POST 요청을 처리할 때 Spring이 요청 바디의 데이터를 UserDTO 객체로 변환하지 못하고 있다는 것으로 보입니다.
+        // 이 문제는 HTTP POST 요청의 바디를 읽어 UserDTO 객체로 변환하는 방법을 정확하게 설정하지 않았기 때문에 발생할 수 있습니다.
+        //@RequestBody 애노테이션을 사용하여 HTTP 요청의 바디를 읽어와서 UserDTO 객체로 변환할 수 있도록 설정해야 합니다.
+        return "이름: " + userDTO.getName() + ", 나이: " + userDTO.getAge();
+    } // o (null)
+
+    @PostMapping("/axios/res5")
+    @ResponseBody
+    public String axiosRes5(@RequestBody UserDTO userDTO) {
+        // @modelAttribute 생략
+        return "이름: " + userDTO.getName() + ", 나이: " + userDTO.getAge();
+    } // o, axios 할떄는 post의 경우 RequestBody로 받아야함
+
+
+    // VO 이용 With axios =============================================
+    @GetMapping("/axios/vo/res1")
+    @ResponseBody
+    public String axiosVoRes1(@RequestParam String name, @RequestParam String age) {
+        return "이름: " + name + ", 나이: " + age;
+    } // o
+    @GetMapping("/axios/vo/res2")
+    @ResponseBody
+    public String axiosVoRes2(UserVO userDTO) {
+        // @modelAttribute 생략
+        // @ModelAttribute가 생략된 상태, setter 함수를 실행해서 값을 넣어주기 떄문에 null이다.
+        // why? UserVO 에는 setter가 없음
+        return "이름: " + userDTO.getName() + ", 나이: " + userDTO.getAge();
+    }  // o (null)
+
+    @PostMapping("/axios/vo/res3")
+    @ResponseBody
+    public String axiosVoRes3(@RequestParam String name, @RequestParam String age) {
+        // @modelAttribute 생략
+        // @RequestParam required 기본값이 true
+        // axios Post 로 값을 전달하게 될 경우 파라미터로 값이 들어오지 않는다. (Post 로 보냈을 때)
+        // 값이 들어오지 않는데 기본 값이 true이기 때문에 오류 발생
+        return "이름: " + name + ", 나이: " + age;
+    } // X (error 400)
+
+    @PostMapping("/axios/vo/res4")
+    @ResponseBody
+    public String axiosVoRes4(UserVO userDTO) {
+        // @modelAttribute 생략
+
+        return "이름: " + userDTO.getName() + ", 나이: " + userDTO.getAge();
+    } // o (null)
+
+    @PostMapping("/axios/vo/res5")
+    @ResponseBody
+    public String axiosVoRes5(@RequestBody UserVO userDTO) {
+        // @RequestBOdy 로 값을 전달할 때 userVO 에 setter 함수가 없어도 값이 들어간다.
+        // 일반: multipart urlencoded
+        // setter 함수 실행(ModelAttribute)이 아니라 각각의 필드(변수)에 직접적으로 값을 주입(RequestBody)하면서 매핑
+        // @ModelAttribute 가 setter 함수를 실행해 값을 넣어준다면
+        // @RequestBody 는 각각의 필드에 직접 주입. private이어도 넣어준다.
+        return "이름: " + userDTO.getName() + ", 나이: " + userDTO.getAge();
+    } // o, axios 할떄는 post의 경우 RequestBody로 받아야함
+
+    @GetMapping("/restapi/practice/dynamic")
+    public String getAxiosPractice1(Model model) {
+        model.addAttribute("years", IntStream.range(1950, 2025).boxed().toList());
+        model.addAttribute("months", IntStream.range(1, 13).boxed().toList());
+        model.addAttribute("days", IntStream.range(1, 32).boxed().toList());
+        return "_02_restapi/practice4_dynamic";
+    }
+    @PostMapping("/restapi/practice/dynamic/result")
+    @ResponseBody
+    public String axiosPractice1(@RequestBody UserVO uservo) {
+        System.out.println(uservo);
+        return "%s (%s) 회원가입 성공".formatted(uservo.getName(), uservo.getAge());
+    }
+
+    @GetMapping("/restapi/practice/dynamic/login")
+    public String getAxiosPracticeLogin(Model model) {
+        return "_02_restapi/practiceLogin";
+    }
+
+    HashMap<String, String> userInfo = new HashMap<>();
+
+    @GetMapping("/restapi/practice/dynamic/getinfo")
+    @ResponseBody
+    public HashMap<String, String> getAxiosPracticegetInfos(Model model) {
+        return userInfo;
+    }
+
+    @PostMapping("/restapi/practice/dynamic/signup")
+    @ResponseBody
+    public String axiosPracticeSignup(@RequestBody LoginVO loginVO) {
+        userInfo.put(loginVO.getId(), loginVO.getPassword());
+        return loginVO.getId() + "회원가입 완료";
+    }
+
+    @PostMapping("/restapi/practice/dynamic/login")
+    @ResponseBody
+    public String axiosPracticeLogin(@RequestBody LoginVO loginVO) {
+        String existingPassword = userInfo.get(loginVO.getId());
+        if (loginVO.getPassword().equals(existingPassword)) {
+        return "로그인 성공";
+        }
+        return "로그인 실패";
+    }
+
+    @PostMapping("/restapi/practice/dynamic/changeInfo")
+    @ResponseBody
+    public String axiosPracticeChangeInfo(@RequestBody ChangeInfoDTO changeInfoDTO) {
+
+        changeInfoDTO.setId(changeInfoDTO.getNewId());
+        userInfo.put(changeInfoDTO.getId(), changeInfoDTO.getPassword());
+    return "new id: " + changeInfoDTO.getId() + " , password: " + changeInfoDTO.getPassword();
+    }
+
+    @PostMapping("/restapi/practice/dynamic/delete")
+    @ResponseBody
+    public String axiosPracticeDelete(@RequestBody LoginVO loginVO) {
+        userInfo.remove(loginVO.getId());
+        return loginVO.getId() + "삭제";
+    }
+
+
+ }
