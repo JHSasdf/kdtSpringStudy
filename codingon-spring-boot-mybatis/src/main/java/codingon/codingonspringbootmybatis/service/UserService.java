@@ -26,12 +26,21 @@ public class UserService {
         List<User> users = userMapper.retrieveAll();
         List<UserDTO> result = new ArrayList<>();
         for (User user: users) {
-            UserDTO userDTO = new UserDTO();
-            userDTO.setId(user.getId());
-            userDTO.setName(user.getName());
-            userDTO.setNickname(user.getNickname());
-            userDTO.setNo(user.getId() + 100);
+            // case1. builder 패턴 사용하지 않는 경우
+//            UserDTO userDTO = new UserDTO();
+//            userDTO.setId(user.getId());
+//            userDTO.setName(user.getName());
+//            userDTO.setNickname(user.getNickname());
+//            userDTO.setNo(user.getId() + 100);
 
+            //////////////////////////////////////////////
+            // case2. builder 패턴 사용하는 경우
+            UserDTO userDTO = UserDTO.builder()
+                    .name(user.getName())
+                    .nickname(user.getNickname())
+                    .id(user.getId())
+                    .no(user.getId() + 100)
+                    .build();
             result.add(userDTO);
         }
         return result;

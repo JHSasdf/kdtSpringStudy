@@ -39,6 +39,7 @@ public class UserController {
         user.setNickname(nickname);
 
         userService.insertUser(user);
-        return "user";
+        // redirect 한 결과 return
+        return "redirect:/community";
     }
 }

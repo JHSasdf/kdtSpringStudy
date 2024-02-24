@@ -4,5 +4,12 @@
 <mapper namespace="codingon.codingonspringbootmybatis.mapper.UserMapper">
     <select id="retrieveAll" resultType="codingon.codingonspringbootmybatis.domain.User">
         SELECT user.* FROM user
+<!--        where 조건 추가-->
+<!--        name이 null이 아닐 때만 name 값도 가져오게-->
+        <where>
+            <if test="name !=null">
+                AND name = #{name}
+            </if>
+        </where>
     </select>
 </mapper>
