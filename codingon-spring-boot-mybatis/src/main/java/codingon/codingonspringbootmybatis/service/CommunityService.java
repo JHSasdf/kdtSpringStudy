@@ -19,8 +19,25 @@ import java.util.List;
 public class CommunityService {
     // @Autowired
     // - 의존성 주입 (쉽게 말하면, 원하는 객체를 직접 생성하지 않고도 사용할 수 있도록 함)
+
+    // - 필드 주입 field injection (constructor x, setter x)
     @Autowired
     CommunityMapper communityMapper;
+
+    // setter 주입
+//    private CommunityMapper communityMapper;
+//
+//    @Autowired
+//    public void setCommunityMapper(CommunityMapper communityMapper) {
+//        this.communityMapper = communityMapper;
+//    }
+
+    // constructor 주입
+    //    private final CommunityMapper communityMapper;
+//    @Autowired
+//    public CommunityService(CommunityMapper communityMapper) {
+//        this.communityMapper = communityMapper;
+//    }
 
     // getUserList()
     // - controller 에서 전체 조회

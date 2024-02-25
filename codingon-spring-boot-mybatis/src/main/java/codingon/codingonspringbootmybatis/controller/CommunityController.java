@@ -21,9 +21,18 @@ public class CommunityController {
 
     // Autowired 쓰려면 Bean이어야한다.
     // Bean이려면 service 이거나 configure 여야함
+    // 객체 생성 시에 사용할 방식 (직접 필드를 쓸건지, 필드에 setter를 쓸건지, 필드를 final로 하고 생성자를 쓸건지)
+
+    // dependency 정의
     @Autowired
     CommunityService communityService;
 
+    // 생성자 주입
+//        private final CommunityService communityService;
+// 생성자 주입은 Autowired안써도 자동와이어링이 된다.
+//    public CommunityController(CommunityService communityService) {
+//        this.communityService = communityService;
+//    }
     @GetMapping("/community")
     public String getCommunity(Model model) {
         List<CommunityDTO> posts = communityService.getPostList();
