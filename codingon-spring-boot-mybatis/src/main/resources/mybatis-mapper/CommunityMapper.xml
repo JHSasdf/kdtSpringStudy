@@ -5,4 +5,17 @@
     <select id="getAllPosts" resultType="codingon.codingonspringbootmybatis.domain.Community">
         SELECT community.* FROM community
     </select>
+    <insert id="insertBoard" parameterType="map">
+        INSERT INTO board(title, content, writer) VALUES(#{title}, #{content}, #{writer})
+    </insert>
+<!--    변수 있을 경우 이렇게 해주면 됨. -->
+    <select id="searchQuery" parameterType="String" resultType="codingon.codingonspringbootmybatis.domain.Community">
+        SELECT * FROM community
+        <where>
+        <if test="word != ''">
+            AND title LIKE CONCAT('%', #{word}, '%')
+<!--            CONCAT: 문자열 더하기-->
+        </if>
+        </where>
+    </select>
 </mapper>

@@ -95,4 +95,24 @@ public class CommunityService {
 
         return result;
     }
+
+    public List<CommunityDTO> searchQuery(String id) {
+        // select 문 자체를 count로 동작시킬 수도 있고
+        // list로 받아와서 그에 대한 길이를 전달할 수도 있다.
+        List<Community> communityList = communityMapper.searchQuery(id);
+
+        List<CommunityDTO> result = new ArrayList<>();
+        for (Community community: communityList) {
+            CommunityDTO communityDTO = CommunityDTO.builder()
+                    .id(community.getId())
+                    .title(community.getTitle())
+                    .content(community.getContent())
+                    .writer(community.getWriter())
+                    .registerd(community.getRegisterd())
+                    .build();
+            result.add(communityDTO);
+        }
+
+        return result;
+    }
 }

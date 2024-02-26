@@ -30,4 +30,5 @@ public interface CommunityMapper {
     @Select("SELECT * FROM community WHERE title = #{query}")
     List<Community> getQuery(String query);
 
+    List<Community> searchQuery(String word);
 }

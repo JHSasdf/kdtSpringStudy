@@ -16,6 +16,7 @@ import java.util.List;
 
 // 작업 순서 : sql 이용해 table 생성 -> 도메인 생성 -> dto -> mapper -> service -> controller
 @Controller
+@RequestMapping("/community") // 밑의 모든 주소값에 board를 추가함.
 public class CommunityController {
     // Create, Read
 
@@ -33,7 +34,7 @@ public class CommunityController {
 //    public CommunityController(CommunityService communityService) {
 //        this.communityService = communityService;
 //    }
-    @GetMapping("/community")
+    @GetMapping("")
     public String getCommunity(Model model) {
         List<CommunityDTO> posts = communityService.getPostList();
         // mybatis를 통해 전달된 정보를 받아와 users 에 넣고
@@ -41,7 +42,7 @@ public class CommunityController {
         return "community";
     }
 
-    @GetMapping("/community/query/{id}")
+    @GetMapping("/{id}")
     public String getQueriedCommunity(Model model,  @PathVariable String id) {
         List<CommunityDTO> posts = communityService.getQueryList(id);
         // mybatis를 통해 전달된 정보를 받아와 users 에 넣고
@@ -49,26 +50,37 @@ public class CommunityController {
         return "community";
     }
 
+    @GetMapping("/search/{id}")
+    public String getSearchedCommunity(Model model,  @PathVariable String id) {
+        List<CommunityDTO> posts = communityService.searchQuery(id);
+        // mybatis를 통해 전달된 정보를 받아와 users 에 넣고
+        model.addAttribute("list", posts);
+        return "community";
+    }
+
     // postman 사용해서 값 insert 할 것
-    @PostMapping("/community/create")
-    public String createPost(@RequestParam String title, @RequestParam String content, @RequestParam String writer) {
-        Community community = new Community();
-        community.setTitle(title);
-        community.setContent(content);
-        community.setWriter(writer);
+    @PostMapping("")
+    @ResponseBody
+    public String createPost(@RequestBody Community community) {
+//        Community community = new Community();
+//        community.setTitle(title);
+//        community.setContent(content);
+//        community.setWriter(writer);
 
         communityService.createPost(community);
         // redirect 한 결과 return
         return "redirect:/community";
     }
 
-    @PostMapping("/community/update")
+    @PatchMapping("")
+    @ResponseBody
     public String updatePost(@RequestBody Community community) {
         communityService.updatePost(community);
         return "redirect:/community";
     }
 
-    @PostMapping("/community/delete")
+    @DeleteMapping("")
+    @ResponseBody
     public String deletePost(int id) {
         communityService.deletePost(id);
         return "redirect:/community";

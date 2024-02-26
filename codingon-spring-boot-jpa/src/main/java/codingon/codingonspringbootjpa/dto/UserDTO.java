@@ -1,20 +1,15 @@
-package codingon.codingonspringbootmybatis.dto;
+package codingon.codingonspringbootjpa.dto;
 
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 @Builder
-public class CommunityDTO {
+public class UserDTO {
     private int id;
-    private String title;
-    private String content;
-    private String writer;
-    private String registerd;
-    // domain.User 와 다르게 "no" 항목을 추가함
-    // 실제 테이블에 존재하는 컬럼은 아니지만 서비스 로직에서 no 정보를 활용할 예정
+    private String name;
+    private String nickname;
+    private int no;
 }
 
 //@Builder

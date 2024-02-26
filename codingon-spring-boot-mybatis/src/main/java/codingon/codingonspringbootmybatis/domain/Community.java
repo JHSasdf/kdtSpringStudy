@@ -10,7 +10,7 @@ public class Community {
     private String title;
     private String content;
     private String writer;
-    private Date registerd;
+    private String registerd;
 }
 // 실제 데이터의 역할이므로 "테이블의 구조"와 동일해야 함
 // maper = sql & 결과를 객체로 매핑되는 객체

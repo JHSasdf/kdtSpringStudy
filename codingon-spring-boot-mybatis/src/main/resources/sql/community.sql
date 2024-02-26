@@ -9,3 +9,5 @@ create table community (
 );
 
 select * from community;
+
+-- 이건 진짜 필요한 게 아니라 mysql workbench에서 실행하는 참고용 파일
