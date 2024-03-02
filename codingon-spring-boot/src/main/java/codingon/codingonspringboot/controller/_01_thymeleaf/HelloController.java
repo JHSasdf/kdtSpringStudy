@@ -14,7 +14,7 @@ public class HelloController {
         // Model model: Controller 클래스 안의 메소드가 파라미터로 받을 수 있는 객체
         // - 정보를 담아 view 에게 넘겨줄 때 사용
         // - 간단할 경우 개발자가 직접 model을 생성할 필요 없이, 파라미터로 선언만 해주면 Spring이 알아서 만듦
-        model.addAttribute("msg", "Hi!!!!"); // ejs에서 보내는 것처럼
+        model.addAttribute("msg", "Hi!sfsfsf!!!"); // ejs에서 보내는 것처럼
 
         // Thymeleaf 표현식과 문법
         model.addAttribute("uText", "<strong>I am String!</strong>");
