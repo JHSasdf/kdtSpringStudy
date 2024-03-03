@@ -12,12 +12,9 @@ import java.util.List;
 @Service
 public class JpaCommunityService {
 
-    private final JpaCommunityRepository jpaCommunityRepository;
-
     @Autowired
-    public JpaCommunityService(JpaCommunityRepository jpaCommunityRepository) {
-        this.jpaCommunityRepository = jpaCommunityRepository;
-    }
+    JpaCommunityRepository jpaCommunityRepository;
+
 
     // DateTime -> String
     // SimpleDateFormat(형식).format(dateTime 데이터)
