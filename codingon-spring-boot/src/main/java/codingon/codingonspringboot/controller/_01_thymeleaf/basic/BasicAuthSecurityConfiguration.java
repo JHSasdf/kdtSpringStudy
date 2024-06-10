@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -22,14 +23,19 @@ import org.springframework.security.web.SecurityFilterChain;
 import javax.sql.DataSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
-
+// jsr250Enabled = true는 controller단에서 allowed를 설정할 수 있다
 //@Configuration
+//@EnableMethodSecurity(jsr250Enabled = true, securedEnabled = true)
 public class BasicAuthSecurityConfiguration {
 
     @Bean
     SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
         // HTTP 요청에 대한 권한 부여 적용
-        http.authorizeHttpRequests((requests) -> requests.anyRequest().authenticated());
+        http.authorizeHttpRequests((requests) ->
+                requests
+                        .requestMatchers("/users").hasRole("USER")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated());
         
         // HTTP 세션에 사용할 정책을 STATELESS로 설정하기 (REST API에서 설정해야 함.)
         // 스프링 부트 기본 옵션에서는 세션을 이용해서 로그인 로그아웃을 설정함.

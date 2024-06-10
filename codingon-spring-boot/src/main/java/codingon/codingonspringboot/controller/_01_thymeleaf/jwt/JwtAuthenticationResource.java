@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Instant;
 import java.util.stream.Collectors;
 
-@RestController
+//@RestController
 public class JwtAuthenticationResource {
 
     // 1. 기본 인증 사용해서 JWT 토큰 받기

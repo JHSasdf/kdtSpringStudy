@@ -40,14 +40,17 @@ import java.util.UUID;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@Configuration
+//@Configuration
 public class JwtAuthSecurityConfiguration {
 
     // 이 secutiryFilterchain이 요청을 인증하게 된다.
     @Bean
     SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
         // HTTP 요청에 대한 권한 부여 적용
-        http.authorizeHttpRequests((requests) -> requests.anyRequest().authenticated());
+        http.authorizeHttpRequests((requests) -> requests
+                .requestMatchers("/authenticate").permitAll()
+                .anyRequest()
+                .authenticated());
 
         // HTTP 세션에 사용할 정책을 STATELESS로 설정하기 (REST API에서 설정해야 함.)
         // 스프링 부트 기본 옵션에서는 세션을 이용해서 로그인 로그아웃을 설정함.
@@ -55,7 +58,7 @@ public class JwtAuthSecurityConfiguration {
 
         // 기본 인증 사용
         http.httpBasic(withDefaults());
-
+//        http.formLogin(withDefaults());
         // csrf 사용 해제
         http.csrf(AbstractHttpConfigurer::disable);
         http.headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
